@@ -20,12 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        env:
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       
       - name: Set up Python
         uses: actions/setup-python@v5
