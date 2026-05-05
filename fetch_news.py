@@ -28,7 +28,7 @@ def fetch_articles(days_back: int = 14) -> list[dict]:
         if not source.get("active") or not source.get("url"):
             continue
         try:
-            feed = feedparser.parse(source["url"])
+            feed = feedparser.parse(source["url"], request_headers={"User-Agent": "Mozilla/5.0 (compatible; chicago-education-digest/1.0)"})
         except Exception as exc:
             print(f"[WARN] Could not fetch {source['name']}: {exc}")
             continue
