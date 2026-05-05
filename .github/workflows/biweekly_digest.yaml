@@ -1,0 +1,58 @@
+name: Biweekly Chicago Education Digest
+
+on:
+  schedule:
+    - cron: "0 14 1,15 * *"
+
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Lookback window in days"
+        default: "14"
+        required: false
+      skip_email:
+        description: "Skip sending email? (true/false)"
+        default: "false"
+        required: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run digest
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+        run: |
+          DAYS=${{ github.event.inputs.days || '14' }}
+          SKIP=${{ github.event.inputs.skip_email || 'false' }}
+          if [ "$SKIP" = "true" ]; then
+            python run_digest.py --days "$DAYS" --no-email
+          else
+            python run_digest.py --days "$DAYS"
+          fi
+
+      - name: Commit digest to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add digests/
+          git diff --staged --quiet || git commit -m "digest: $(date -u +'%Y-%m-%d') biweekly update"
+          git push
