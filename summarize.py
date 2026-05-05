@@ -33,7 +33,7 @@ def summarize_topic(topic_name: str, articles: list[dict]) -> str:
     )
 
     response = _client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash-preview-05-20",
         contents=prompt,
         config=types.GenerateContentConfig(system_instruction=_SYSTEM),
     )
