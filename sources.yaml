@@ -1,9 +1,14 @@
 sources:
   - name: "Chalkbeat Chicago"
-    url: "https://chicago.chalkbeat.org/rss"
+    url: "https://www.chalkbeat.org/chicago/"
     type: rss
     active: true
 
+  - name: "WBEZ Chicago"
+    url: "https://www.wbez.org/education"
+    type: rss
+    active: true
+    
   - name: "Chicago Tribune Education"
     url: "https://www.chicagotribune.com/arcio/rss/category/education/"
     type: rss
@@ -23,8 +28,3 @@ sources:
     url: "https://www.isbe.net/api/news/rss"
     type: rss
     active: true
-
-  - name: "Illinois Report Card"
-    url: ""
-    type: manual
-    active: false
