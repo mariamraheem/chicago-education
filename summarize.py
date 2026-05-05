@@ -1,17 +1,16 @@
 """Use Google Gemini to generate a narrative summary for each topic bucket."""
 
 import os
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-_model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash",
-    system_instruction=(
-        "You are an education policy analyst covering Chicago K-12 public education. "
-        "Your audience is education stakeholders — advocates, administrators, parents, and policymakers. "
-        "Write concise, neutral, factual summaries that highlight key themes, notable developments, "
-        "and any emerging trends or tensions. Avoid jargon. Do not editorialize."
-    ),
+_client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+
+_SYSTEM = (
+    "You are an education policy analyst covering Chicago K-12 public education. "
+    "Your audience is education stakeholders — advocates, administrators, parents, and policymakers. "
+    "Write concise, neutral, factual summaries that highlight key themes, notable developments, "
+    "and any emerging trends or tensions. Avoid jargon. Do not editorialize."
 )
 
 
@@ -33,5 +32,9 @@ def summarize_topic(topic_name: str, articles: list[dict]) -> str:
         f"the main themes and significant developments.\n\n{articles_text}"
     )
 
-    response = _model.generate_content(prompt)
+    response = _client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=prompt,
+        config=types.GenerateContentConfig(system_instruction=_SYSTEM),
+    )
     return response.text.strip()
