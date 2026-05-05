@@ -1,10 +1,12 @@
 """Fetch articles from RSS feeds and categorize them by topic."""
 
-import time
 import feedparser
+import requests
 import yaml
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
+
+_HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; chicago-education-digest/1.0)"}
 
 
 def _load_yaml(filename: str) -> dict:
