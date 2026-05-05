@@ -72,7 +72,7 @@ def main():
     sections = []
 
     for topic_name, topic_articles in categorized.items():
-        print(f"Summarizing "{topic_name}" ({len(topic_articles)} articles)…")
+        print(f'Summarizing "{topic_name}" ({len(topic_articles)} articles)…')
         summary = summarize_topic(topic_name, topic_articles)
         if not summary and not topic_articles:
             summary = "No articles matched this topic in the current period."
