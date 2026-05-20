@@ -1,14 +1,9 @@
 sources:
   - name: "Chalkbeat Chicago"
-    url: "https://www.chalkbeat.org/chicago/"
+    url: "https://www.chalkbeat.org/arc/outboundfeeds/rss/chicago/?outputType=xml"
     type: rss
     active: true
 
-  - name: "WBEZ Chicago"
-    url: "https://www.wbez.org/education"
-    type: rss
-    active: true
-    
   - name: "Chicago Tribune Education"
     url: "https://www.chicagotribune.com/arcio/rss/category/education/"
     type: rss
@@ -26,5 +21,20 @@ sources:
 
   - name: "Illinois State Board of Education"
     url: "https://www.isbe.net/api/news/rss"
+    type: rss
+    active: true
+
+  - name: "Illinois Report Card"
+    url: ""
+    type: manual
+    active: false
+
+  - name: "Google News - Chicago Education"
+    url: "https://news.google.com/rss/search?q=chicago+education+schools+CPS&hl=en-US&gl=US&ceid=US:en"
+    type: rss
+    active: true
+
+  - name: "Google News - Chicago Board of Education"
+    url: "https://news.google.com/rss/search?q=chicago+board+of+education+CPS+schools&hl=en-US&gl=US&ceid=US:en"
     type: rss
     active: true
