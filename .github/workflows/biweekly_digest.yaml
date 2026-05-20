@@ -2,8 +2,8 @@ name: Biweekly Chicago Education Digest
 
 on:
   schedule:
-    - cron: "0 14 1,15 * *"
-
+    - cron: "0 14 * * 1"
+    
   workflow_dispatch:
     inputs:
       days:
