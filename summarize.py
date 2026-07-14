@@ -36,6 +36,6 @@ def summarize_topic(topic_name: str, articles: list[dict]) -> str:
         model="gemini-2.5-flash",
         contents=prompt,
         config=types.GenerateContentConfig(
-            http_options={"max_retries": 3}, system_instruction=_SYSTEM),
+            temperature=0.3, system_instruction=_SYSTEM),
     )
     return response.text.strip()

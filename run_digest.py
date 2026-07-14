@@ -1,5 +1,5 @@
 """
-Main entry point.
+Main entry point for the digest script. Fetches articles, summarizes them, saves a markdown digest, and optionally emails it.
 
 Usage:
   python run_digest.py              # fetch last 14 days, summarize, email, save digest
