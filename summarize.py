@@ -1,8 +1,10 @@
 """Use Google Gemini to generate a narrative summary for each topic bucket."""
 
 import os
+import time
 from google import genai
 from google.genai import types
+from google.genai.errors import ServerError, ClientError
 
 _client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
@@ -28,14 +30,28 @@ def summarize_topic(topic_name: str, articles: list[dict]) -> str:
 
     prompt = (
         f"Below are recent news articles about **{topic_name}** in Chicago "
-        f"from the past two weeks. Write a 2-3 paragraph summary covering "
+        f"from the past week. Write a 2-3 paragraph summary covering "
         f"the main themes and significant developments.\n\n{articles_text}"
     )
 
-    response = _client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            temperature=0.3, system_instruction=_SYSTEM),
-    )
-    return response.text.strip()
+    for attempt in range(4):
+        try:
+            response = _client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.3, system_instruction=_SYSTEM
+                ),
+            )
+            return response.text.strip()
+        except ServerError as e:
+            if attempt < 3:
+                wait = 15 * (2 ** attempt)  # 15s, 30s, 60s
+                print(f"  [WARN] Gemini unavailable, retrying in {wait}s… ({e})")
+                time.sleep(wait)
+            else:
+                print(f"  [ERROR] Gemini failed after 4 attempts for '{topic_name}': {e}")
+                return f"Summary unavailable — Gemini API temporarily unavailable."
+        except ClientError as e:
+            print(f"  [ERROR] Gemini client error for '{topic_name}': {e}")
+            return f"Summary unavailable — API error."
